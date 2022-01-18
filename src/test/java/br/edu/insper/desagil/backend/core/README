@@ -1,0 +1,3 @@
+Crie aqui os casos de teste das classes que não são DAOs nem endpoints.
+
+Use a mesma organização em subpacotes dessas classes.

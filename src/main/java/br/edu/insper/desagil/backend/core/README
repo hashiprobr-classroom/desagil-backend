@@ -1,0 +1,3 @@
+Crie aqui as classes que não são DAOs nem endpoints.
+
+Você pode criar subpacotes se achar necessário.
