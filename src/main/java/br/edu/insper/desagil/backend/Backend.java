@@ -2,13 +2,11 @@
 
 package br.edu.insper.desagil.backend;
 
-import java.io.IOException;
-
 import br.pro.hashi.nfp.dao.Firebase;
 import br.pro.hashi.nfp.rest.server.RestServer;
 
 public class Backend {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		Builder builder = new Builder("main");
 		Firebase firebase = builder.buildFirebase();
 		RestServer server = builder.buildRestServer();
@@ -20,6 +18,7 @@ public class Backend {
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			server.stop();
 			firebase.disconnect();
+			server.destroy();
 			firebase.delete();
 		}));
 	}
