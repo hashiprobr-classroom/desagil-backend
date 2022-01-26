@@ -9,10 +9,10 @@ import java.util.Properties;
 import br.pro.hashi.nfp.dao.Firebase;
 import br.pro.hashi.nfp.rest.server.RestServer;
 
-public class Builder {
+public class Factory {
 	private Properties properties;
 
-	public Builder(String name) {
+	public Factory(String name) {
 		this.properties = new Properties();
 		try {
 			this.properties.load(new FileInputStream("%s.properties".formatted(name)));
@@ -29,7 +29,7 @@ public class Builder {
 		}
 	}
 
-	public Firebase buildFirebase() {
+	public Firebase createFirebase() {
 		String path = getProperty("dao.credentials");
 		String url = getProperty("dao.storage.url");
 		if (url.startsWith("gs://")) {
@@ -46,10 +46,10 @@ public class Builder {
 			name = null;
 			System.err.println("Property %s does not exist, defaulted to blank".formatted(key));
 		}
-		return Firebase.buildInstance(path, url, name);
+		return Firebase.Manager().create(path, url, name);
 	}
 
-	public RestServer buildRestServer() {
+	public RestServer createRestServer() {
 		String name = getProperty("rest.package");
 		String key = "rest.port";
 		int port;
@@ -59,7 +59,7 @@ public class Builder {
 			port = 8080;
 			System.err.println("Property %s does not exist, defaulted to %d".formatted(key, port));
 		}
-		return new RestServer(name, port);
+		return RestServer.Builder(name).at(port).build();
 	}
 
 	public boolean useTunnel() {

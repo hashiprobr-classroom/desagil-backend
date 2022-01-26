@@ -7,10 +7,10 @@ import br.pro.hashi.nfp.rest.server.RestServer;
 
 public class Backend {
 	public static void main(String[] args) {
-		Builder builder = new Builder("main");
-		Firebase firebase = builder.buildFirebase();
-		RestServer server = builder.buildRestServer();
-		boolean useTunnel = builder.useTunnel();
+		Factory factory = new Factory("main");
+		Firebase firebase = factory.createFirebase();
+		RestServer server = factory.createRestServer();
+		boolean useTunnel = factory.useTunnel();
 
 		firebase.connect();
 		server.start(useTunnel);
@@ -19,7 +19,7 @@ public class Backend {
 			server.stop();
 			firebase.disconnect();
 			server.destroy();
-			firebase.delete();
+			firebase.remove();
 		}));
 	}
 }
