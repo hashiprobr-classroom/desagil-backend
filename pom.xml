@@ -17,7 +17,7 @@
     <dependency>
       <groupId>io.github.hashiprobr</groupId>
       <artifactId>nfp-rest</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.5</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
