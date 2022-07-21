@@ -1,4 +1,4 @@
-// Não é necessário entender ou modificar este arquivo.
+// NÃO É NECESSÁRIO ENTENDER OU MODIFICAR ESTE ARQUIVO.
 
 package br.edu.insper.desagil.backend;
 
