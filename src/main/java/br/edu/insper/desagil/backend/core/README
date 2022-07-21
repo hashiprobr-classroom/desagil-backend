@@ -1,3 +1,4 @@
-Crie aqui as classes que não são DAOs nem endpoints.
+Crie aqui as classes básicas do seu backend, ou seja,
+as que não são adapters, converters, DAOs ou endpoints.
 
 Você pode criar subpacotes se achar necessário.

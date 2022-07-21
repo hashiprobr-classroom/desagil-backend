@@ -4,73 +4,47 @@ package br.edu.insper.desagil.backend;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import br.pro.hashi.nfp.dao.Firebase;
+import br.pro.hashi.nfp.dao.FirebaseManager;
 import br.pro.hashi.nfp.rest.server.RESTServer;
+import br.pro.hashi.nfp.rest.server.RESTServerFactory;
 
 public class Factory {
-	private Properties properties;
+	private final Properties properties;
 
-	public Factory(String name) {
+	public Factory(String name) throws IOException {
+		String path = "%s.properties".formatted(name);
+		InputStream stream = new FileInputStream(path);
 		this.properties = new Properties();
-		try {
-			this.properties.load(new FileInputStream("%s.properties".formatted(name)));
-		} catch (IOException exception) {
-			throw new RuntimeException(exception);
-		}
+		this.properties.load(stream);
 	}
 
-	private String getProperty(String key) {
-		if (properties.containsKey(key)) {
-			return properties.getProperty(key);
-		} else {
-			throw new RuntimeException("Property %s does not exist".formatted(key));
+	private String get(String key) {
+		String value = properties.getProperty(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Property %s does not exist".formatted(key));
 		}
+		return value.strip();
 	}
 
-	public Firebase createFirebase() {
-		String path = getProperty("dao.credentials");
-		String url = getProperty("dao.storage.url");
-		if (url.startsWith("gs://")) {
-			url = url.substring(5);
-		}
-		String key = "dao.name";
-		String name;
-		if (properties.containsKey(key)) {
-			name = properties.getProperty(key);
-			if (name.isBlank()) {
-				name = null;
-			}
-		} else {
-			name = null;
-			System.err.println("Property %s does not exist, defaulted to blank".formatted(key));
-		}
-		return Firebase.manager().getFromCredentials(path);
+	public Firebase buildFirebase() {
+		String path = get("credentials");
+		FirebaseManager manager = Firebase.manager();
+		return manager.getFromCredentials(path);
 	}
 
-	public RESTServer createRestServer() {
-		String name = getProperty("rest.package");
-		String key = "rest.port";
-		int port;
-		if (properties.containsKey(key)) {
-			port = Integer.parseInt(properties.getProperty(key));
-		} else {
-			port = 8080;
-			System.err.println("Property %s does not exist, defaulted to %d".formatted(key, port));
-		}
-		return RESTServer.factory().build(name);
+	public RESTServer buildServer() {
+		String endpointPrefix = "br.edu.insper.desagil.backend.endpoint";
+		String converterPrefix = "br.edu.insper.desagil.backend.converter";
+		int port = Integer.parseInt(get("port"));
+		RESTServerFactory factory = RESTServer.factory();
+		return factory.build(endpointPrefix, converterPrefix, port);
 	}
 
 	public boolean useTunnel() {
-		String key = "rest.tunnel";
-		boolean value;
-		if (properties.containsKey(key)) {
-			value = Boolean.parseBoolean(properties.getProperty(key));
-		} else {
-			value = false;
-			System.err.println("Property %s does not exist, defaulted to %d".formatted(key, value));
-		}
-		return value;
+		return Boolean.parseBoolean(get("tunnel"));
 	}
 }
