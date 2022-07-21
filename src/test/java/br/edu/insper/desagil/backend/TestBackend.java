@@ -3,7 +3,7 @@
 package br.edu.insper.desagil.backend;
 
 import br.pro.hashi.nfp.dao.Firebase;
-import br.pro.hashi.nfp.rest.server.RestServer;
+import br.pro.hashi.nfp.rest.server.RESTServer;
 
 public class TestBackend {
 	public static void main(String[] args) {
@@ -12,15 +12,13 @@ public class TestBackend {
 		Firebase firebase = factory.createFirebase();
 		firebase.connect();
 
-		RestServer server = factory.createRestServer();
+		RESTServer server = factory.createRestServer();
 		boolean useTunnel = factory.useTunnel();
 		server.start(useTunnel);
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			server.stop();
-			server.destroy();
-			firebase.disconnect();
-			firebase.remove();
+			firebase.delete();
 		}));
 	}
 }

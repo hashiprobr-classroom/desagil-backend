@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import br.pro.hashi.nfp.dao.Firebase;
-import br.pro.hashi.nfp.rest.server.RestServer;
+import br.pro.hashi.nfp.rest.server.RESTServer;
 
 public class Factory {
 	private Properties properties;
@@ -46,10 +46,10 @@ public class Factory {
 			name = null;
 			System.err.println("Property %s does not exist, defaulted to blank".formatted(key));
 		}
-		return Firebase.Manager().create(path, url, name);
+		return Firebase.manager().getFromCredentials(path);
 	}
 
-	public RestServer createRestServer() {
+	public RESTServer createRestServer() {
 		String name = getProperty("rest.package");
 		String key = "rest.port";
 		int port;
@@ -59,7 +59,7 @@ public class Factory {
 			port = 8080;
 			System.err.println("Property %s does not exist, defaulted to %d".formatted(key, port));
 		}
-		return RestServer.Builder(name).at(port).build();
+		return RESTServer.factory().build(name);
 	}
 
 	public boolean useTunnel() {
