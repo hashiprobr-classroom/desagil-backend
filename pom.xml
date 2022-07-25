@@ -12,12 +12,12 @@
     <dependency>
       <groupId>io.github.hashiprobr</groupId>
       <artifactId>nfp-dao</artifactId>
-      <version>4.0.1</version>
+      <version>4.0.2</version>
     </dependency>
     <dependency>
       <groupId>io.github.hashiprobr</groupId>
       <artifactId>nfp-rest</artifactId>
-      <version>3.0.1</version>
+      <version>3.0.3</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
